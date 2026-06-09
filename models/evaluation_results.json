@@ -1,1 +1,174 @@
-
+{
+  "category": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "classification_report": {
+      "Account Access": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 231.0
+      },
+      "Billing Inquiry": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 316.0
+      },
+      "General Query": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 241.0
+      },
+      "Product Inquiry": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 323.0
+      },
+      "Technical Issue": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 489.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1600.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1600.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        231,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        316,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        241,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        323,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        489
+      ]
+    ],
+    "labels": [
+      "Account Access",
+      "Billing Inquiry",
+      "General Query",
+      "Product Inquiry",
+      "Technical Issue"
+    ]
+  },
+  "priority": {
+    "accuracy": 1.0,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1_score": 1.0,
+    "classification_report": {
+      "Critical": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 159.0
+      },
+      "High": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 423.0
+      },
+      "Low": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 423.0
+      },
+      "Medium": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 595.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1600.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 1600.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        423,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        595,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        423,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        159
+      ]
+    ],
+    "labels": [
+      "Low",
+      "Medium",
+      "High",
+      "Critical"
+    ]
+  }
+}
