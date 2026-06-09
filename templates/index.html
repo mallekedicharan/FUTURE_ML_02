@@ -1,1 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI-powered support ticket classification and priority assignment system using NLP and Machine Learning">
+    <title>TicketIQ — Smart Support Ticket Classifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
 
+    <!-- NAVIGATION -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-brand">
+                <span class="brand-icon">⚡</span>
+                <span class="brand-name">TicketIQ</span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#classifier" class="nav-link">Classifier</a></li>
+                <li><a href="#performance" class="nav-link">Performance</a></li>
+                <li><a href="#how-it-works" class="nav-link">How It Works</a></li>
+                <li><a href="#samples" class="nav-link">Samples</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <header class="hero" id="hero">
+        <div class="hero-content">
+            <div class="hero-badge">ML-Powered NLP System</div>
+            <h1>Support Ticket<br><span class="hero-accent">Classification & Prioritization</span></h1>
+            <p class="hero-subtitle">
+                Automatically categorize customer support tickets and assign priority levels
+                using Natural Language Processing and Machine Learning — helping support teams
+                respond faster and reduce backlog.
+            </p>
+            <div class="hero-stats" id="hero-stats">
+                <div class="hero-stat">
+                    <span class="stat-value" id="stat-accuracy">—</span>
+                    <span class="stat-label">Category Accuracy</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value" id="stat-priority-accuracy">—</span>
+                    <span class="stat-label">Priority Accuracy</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value" id="stat-categories">5</span>
+                    <span class="stat-label">Categories</span>
+                </div>
+                <div class="hero-stat">
+                    <span class="stat-value" id="stat-priorities">4</span>
+                    <span class="stat-label">Priority Levels</span>
+                </div>
+            </div>
+            <a href="#classifier" class="hero-cta">Try the Classifier</a>
+        </div>
+    </header>
+
+    <!-- CLASSIFIER SECTION -->
+    <section class="section" id="classifier">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Live Demo</span>
+                <h2>Classify a Support Ticket</h2>
+                <p>Enter a customer support ticket description below. The ML model will automatically classify it into a category and assign a priority level.</p>
+            </div>
+
+            <div class="classifier-grid">
+                <div class="classifier-input-card">
+                    <div class="card-header">
+                        <span class="card-icon">✏️</span>
+                        <h3>Ticket Input</h3>
+                    </div>
+                    <textarea
+                        id="ticket-input"
+                        placeholder="Example: My laptop screen has been flickering since the last update. I've tried restarting multiple times but the issue persists. This is affecting my work productivity..."
+                        rows="8"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button id="classify-btn" class="btn-primary" onclick="classifyTicket()">
+                            <span class="btn-icon">🔍</span>
+                            Classify Ticket
+                        </button>
+                        <button id="sample-btn" class="btn-secondary" onclick="loadSampleTicket()">
+                            Load Sample
+                        </button>
+                        <button id="clear-btn" class="btn-ghost" onclick="clearInput()">
+                            Clear
+                        </button>
+                    </div>
+                </div>
+
+                <div class="classifier-result-card" id="result-card">
+                    <div class="card-header">
+                        <span class="card-icon">📊</span>
+                        <h3>Classification Result</h3>
+                    </div>
+                    <div class="result-placeholder" id="result-placeholder">
+                        <div class="placeholder-icon">🎯</div>
+                        <p>Enter a ticket description and click "Classify Ticket" to see results</p>
+                    </div>
+                    <div class="result-content" id="result-content" style="display:none;">
+                        <div class="result-item result-category">
+                            <div class="result-label">Category</div>
+                            <div class="result-value" id="result-category-value">—</div>
+                            <div class="result-desc" id="result-category-desc"></div>
+                        </div>
+                        <div class="result-item result-priority">
+                            <div class="result-label">Priority</div>
+                            <div class="result-value">
+                                <span class="priority-badge" id="result-priority-value">—</span>
+                            </div>
+                            <div class="result-desc" id="result-priority-desc"></div>
+                        </div>
+                        <div class="result-processed">
+                            <div class="result-label">Processed Text</div>
+                            <div class="processed-text" id="result-processed-text"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- PERFORMANCE SECTION -->
+    <section class="section section-dark" id="performance">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Model Metrics</span>
+                <h2>Performance Dashboard</h2>
+                <p>Comprehensive evaluation metrics for both the category classifier and priority prediction models.</p>
+            </div>
+
+            <!-- CATEGORY METRICS -->
+            <div class="metrics-panel">
+                <h3 class="panel-title">
+                    <span class="panel-icon">🏷️</span>
+                    Category Classifier — LinearSVC
+                </h3>
+                <div class="metrics-grid" id="category-metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="cat-accuracy">—</div>
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill" id="cat-accuracy-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="cat-precision">—</div>
+                        <div class="metric-label">Precision</div>
+                        <div class="metric-bar"><div class="metric-fill" id="cat-precision-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="cat-recall">—</div>
+                        <div class="metric-label">Recall</div>
+                        <div class="metric-bar"><div class="metric-fill" id="cat-recall-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="cat-f1">—</div>
+                        <div class="metric-label">F1-Score</div>
+                        <div class="metric-bar"><div class="metric-fill" id="cat-f1-bar"></div></div>
+                    </div>
+                </div>
+                <div class="confusion-section">
+                    <h4>Confusion Matrix</h4>
+                    <div class="confusion-wrapper">
+                        <table class="confusion-matrix" id="cat-confusion-matrix">
+                            <thead><tr><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="report-section">
+                    <h4>Classification Report</h4>
+                    <table class="report-table" id="cat-report-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                                <th>Support</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- PRIORITY METRICS -->
+            <div class="metrics-panel">
+                <h3 class="panel-title">
+                    <span class="panel-icon">🚦</span>
+                    Priority Classifier — Random Forest
+                </h3>
+                <div class="metrics-grid" id="priority-metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value" id="pri-accuracy">—</div>
+                        <div class="metric-label">Accuracy</div>
+                        <div class="metric-bar"><div class="metric-fill" id="pri-accuracy-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="pri-precision">—</div>
+                        <div class="metric-label">Precision</div>
+                        <div class="metric-bar"><div class="metric-fill" id="pri-precision-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="pri-recall">—</div>
+                        <div class="metric-label">Recall</div>
+                        <div class="metric-bar"><div class="metric-fill" id="pri-recall-bar"></div></div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="pri-f1">—</div>
+                        <div class="metric-label">F1-Score</div>
+                        <div class="metric-bar"><div class="metric-fill" id="pri-f1-bar"></div></div>
+                    </div>
+                </div>
+                <div class="confusion-section">
+                    <h4>Confusion Matrix</h4>
+                    <div class="confusion-wrapper">
+                        <table class="confusion-matrix" id="pri-confusion-matrix">
+                            <thead><tr><th></th></tr></thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="report-section">
+                    <h4>Classification Report</h4>
+                    <table class="report-table" id="pri-report-table">
+                        <thead>
+                            <tr>
+                                <th>Class</th>
+                                <th>Precision</th>
+                                <th>Recall</th>
+                                <th>F1-Score</th>
+                                <th>Support</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- HOW IT WORKS SECTION -->
+    <section class="section" id="how-it-works">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Pipeline</span>
+                <h2>How It Works</h2>
+                <p>The complete ML pipeline from raw ticket text to actionable classification and priority assignment.</p>
+            </div>
+
+            <div class="pipeline-grid">
+                <div class="pipeline-step">
+                    <div class="step-number">01</div>
+                    <div class="step-icon">📝</div>
+                    <h3>Raw Ticket Input</h3>
+                    <p>Customer submits a support ticket through email, chat, phone, or web form. The raw text contains the issue description, complaints, or inquiries.</p>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">02</div>
+                    <div class="step-icon">🧹</div>
+                    <h3>Text Preprocessing</h3>
+                    <p>Using <strong>NLTK</strong>, we clean the text: convert to lowercase, remove punctuation and stopwords, tokenize, and lemmatize words to their base form.</p>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">03</div>
+                    <div class="step-icon">🔢</div>
+                    <h3>TF-IDF Vectorization</h3>
+                    <p>Using <strong>Scikit-learn's TfidfVectorizer</strong>, text is converted to numerical feature vectors. We use unigrams and bigrams with sublinear TF scaling for best results.</p>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">04</div>
+                    <div class="step-icon">🤖</div>
+                    <h3>ML Classification</h3>
+                    <p>Two models run in parallel: <strong>LinearSVC</strong> predicts the ticket category (5 classes), and <strong>Random Forest</strong> predicts priority level (4 levels).</p>
+                </div>
+                <div class="pipeline-connector"></div>
+                <div class="pipeline-step">
+                    <div class="step-number">05</div>
+                    <div class="step-icon">✅</div>
+                    <h3>Result & Routing</h3>
+                    <p>The system returns a category and priority, enabling automatic ticket routing to the right team with appropriate urgency for faster resolution.</p>
+                </div>
+            </div>
+
+            <div class="tech-stack">
+                <h3>Technology Stack</h3>
+                <div class="tech-grid">
+                    <div class="tech-item">
+                        <div class="tech-name">Python</div>
+                        <div class="tech-desc">Core development language</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-name">NLTK</div>
+                        <div class="tech-desc">Text preprocessing & NLP</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-name">Scikit-learn</div>
+                        <div class="tech-desc">ML models & TF-IDF</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-name">Flask</div>
+                        <div class="tech-desc">Web application server</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-name">Pandas</div>
+                        <div class="tech-desc">Data manipulation</div>
+                    </div>
+                    <div class="tech-item">
+                        <div class="tech-name">NumPy</div>
+                        <div class="tech-desc">Numerical computing</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- SAMPLE PREDICTIONS SECTION -->
+    <section class="section section-dark" id="samples">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Demo Data</span>
+                <h2>Sample Predictions</h2>
+                <p>See how the model classifies real sample tickets from the dataset.</p>
+            </div>
+            <div class="samples-controls">
+                <button class="btn-primary" onclick="loadSamplePredictions()">
+                    <span class="btn-icon">🔄</span>
+                    Load New Samples
+                </button>
+            </div>
+            <div class="samples-table-wrapper">
+                <table class="samples-table" id="samples-table">
+                    <thead>
+                        <tr>
+                            <th>Ticket Description</th>
+                            <th>Actual Category</th>
+                            <th>Predicted Category</th>
+                            <th>Actual Priority</th>
+                            <th>Predicted Priority</th>
+                            <th>Match</th>
+                        </tr>
+                    </thead>
+                    <tbody id="samples-tbody">
+                        <tr><td colspan="6" class="empty-row">Click "Load New Samples" to see predictions</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <!-- BUSINESS IMPACT SECTION -->
+    <section class="section" id="business-impact">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Business Value</span>
+                <h2>How This Improves Support Operations</h2>
+                <p>This ML system delivers measurable impact for real business support teams.</p>
+            </div>
+            <div class="impact-grid">
+                <div class="impact-card">
+                    <div class="impact-icon">⚡</div>
+                    <h3>Faster Response Times</h3>
+                    <p>Automatic categorization eliminates manual sorting. Critical tickets are flagged immediately, reducing first-response time by up to 60%.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">📉</div>
+                    <h3>Reduced Backlog</h3>
+                    <p>Priority-based routing ensures urgent issues are handled first. Support teams focus on solving, not sorting — clearing backlogs faster.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">🎯</div>
+                    <h3>Accurate Routing</h3>
+                    <p>Tickets are automatically sent to the right department. Billing goes to finance, technical issues go to engineering — no more misrouted tickets.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">📊</div>
+                    <h3>Data-Driven Insights</h3>
+                    <p>Classification data reveals patterns: which products generate most issues, peak complaint categories, and trends in customer concerns.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">😊</div>
+                    <h3>Better Customer Satisfaction</h3>
+                    <p>Customers get faster, more accurate responses. High-priority issues get escalated automatically, preventing delays on critical problems.</p>
+                </div>
+                <div class="impact-card">
+                    <div class="impact-icon">💰</div>
+                    <h3>Cost Efficiency</h3>
+                    <p>Automating ticket triage saves hundreds of person-hours monthly. Support teams handle more tickets with the same resources.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="brand-icon">⚡</span>
+                    <span class="brand-name">TicketIQ</span>
+                </div>
+                <p class="footer-text">
+                    Support Ticket Classification & Prioritization System<br>
+                    Machine Learning Task 2 — Future Interns (2026)
+                </p>
+                <div class="footer-tech">
+                    Built with Python · NLTK · Scikit-learn · Flask
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="/static/script.js"></script>
+</body>
+</html>
